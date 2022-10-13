@@ -25,14 +25,16 @@ def parse_search(resp):
     sel = Selector(text=resp.text)
     product_boxes = sel.css("div.s-result-item[data-component-type=s-search-result]")
     for box in product_boxes:
+        asin = box.xpath('@data-asin').extract_first()
         # get the url of every search item in the search result
-        url = urljoin(str(resp.url), box.css("h2>a::attr(href)").get()).split("?")[0]
-        if len(urljoin(str(resp.url), box.css("h2>a::attr(href)").get()).split(
-                "/")) != 6 and "/slredirect/" not in url and "sspa" not in url:  # skip ads etc.
+        box_url = urljoin(str(resp.url), box.css("h2>a::attr(href)").get()).split("?")[0]
+        url = f"https://www.amazon.com/dp/{asin}"
+        if len(urljoin(str(resp.url), box.css("h2>a::attr(href)").get()).split("/")) != 6 and "/slredirect/" not in box_url and "sspa" not in box_url:  # skip ads etc.
             previews.append(
                 {
-                    "url": url,
+                    "asin": asin,
                     "title": box.css("h2>a>span::text").get(),
+                    "url": url,
                 }
             )
     log.debug(f"found {len(previews)} product listings in {resp.url}")  # formulates the summery and debug log report
@@ -61,27 +63,20 @@ async def get_product_search_list(query):
     limits = httpx.Limits(max_connections=5)
     async with httpx.AsyncClient(limits=limits, timeout=httpx.Timeout(15.5), headers=HEADERS) as session:
         data = await search(query, session=session)
-        for item in data:
-            item["item_name"] = query
-            item["acin"] = item["url"].split('/')[5]
     return data
 
 if __name__ == '__main__':
-    results = []
-    for query in query_list:
-        data = asyncio.run(get_product_search_list(query))
-        results.append(data)
+    query = 'Refrigerator'
+    products_by_query = asyncio.run(get_product_search_list(query))
 
     i = int(input("Enter the file number four the output: "))
-    
-    with open(f'Data/json/query_results_{i}.json', 'w') as file:
-        json.dump(results, file, indent=2)
 
-    # todo check why we can not write through panda dataframe after I try to loop over the query list and how to fix it
-    # with open(f'/Data/query_results_{i}.json', 'r') as f:
-    #     results =json.load(f)
-    # df = pd.DataFrame(results, columns=['item_name', 'acin', 'title', 'url'])
-    # df.to_excel(f"query_results_{i}.xlsx", index=False)
+    # write the data to json file
+    with open(f'Data/json/query_results_{i}.json', 'w') as file:
+        json.dump(products_by_query, file, indent=2)
+    # write the data to Excel file
+    df = pd.DataFrame(products_by_query, columns=['asin', 'title', 'url'])
+    df.to_excel(f"Data/xlsx/query_results_{i}.xlsx", index=False)
 
 
 

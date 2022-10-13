@@ -27,6 +27,11 @@ class AmazonSpider(scrapy.Spider):
         super().__init__(name, kwargs)
         self.parse_product_page = None
 
+    def start_requests(self):
+        for query in queries:
+            url = 'https://www.amazon.com/s?' + urlencode({'k': query})
+            yield scrapy.Request(url=url, callback=self.parse_keyword_response)
+
     def parse_keyword_response(self, response):
         products = response.xpath('//*[@data-asin]')
         for product in products:
@@ -36,11 +41,6 @@ class AmazonSpider(scrapy.Spider):
         next_page = response.xpath('//li[@class="a-last"]/a/@href').extract_first()
         if next_page:
             url = urljoin("https://www.amazon.com", next_page)
-            yield scrapy.Request(url=url, callback=self.parse_keyword_response)
-
-    def start_requests(self):
-        for query in queries:
-            url = 'https://www.amazon.com/s?' + urlencode({'k': query})
             yield scrapy.Request(url=url, callback=self.parse_keyword_response)
 
 
