@@ -7,10 +7,6 @@ from parsel import Selector
 from loguru import logger as log
 from urllib.parse import urljoin
 
-search_query_1 = 'Refrigerator'.replace(' ', '+')
-search_query_2 = 't-shirt women'.replace(' ', '+')  # --> 't-shirt+women'
-search_query_3 = 'lego'.replace(' ', '+')  # --> 't-shirt+women'
-query_list = [search_query_1, search_query_2, search_query_3]
 HEADERS = {
     "accept-language": "en-US,en;q=0.9",
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
@@ -66,8 +62,11 @@ async def get_product_search_list(query):
     return data
 
 if __name__ == '__main__':
-    query = 'Refrigerator'
-    products_by_query = asyncio.run(get_product_search_list(query))
+    search_query_1 = 'Refrigerator'.replace(' ', '+')
+    search_query_2 = 't-shirt women'.replace(' ', '+')  # --> 't-shirt+women'
+    search_query_3 = 'lego'.replace(' ', '+')  # --> 't-shirt+women'
+
+    products_by_query = asyncio.run(get_product_search_list(search_query_1))
 
     i = int(input("Enter the file number four the output: "))
 

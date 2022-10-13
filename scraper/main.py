@@ -1,5 +1,7 @@
 from scrap_search import search
-from scraping_reviews import *
+from scrap_reviews import *
+
+# combine the scrap_search and the scrap_reviews
 
 
 async def get_reviews_by_keyword(keyword):
@@ -31,7 +33,8 @@ async def get_reviews_by_keyword(keyword):
 if __name__ == '__main__':
     # pass
     search_keyword = 'Refrigerator'
-    reviews_by_keyword = asyncio.run(get_reviews_by_keyword(search_keyword))
+    search_query = search_keyword.replace(' ', '+')
+    reviews_by_keyword = asyncio.run(get_reviews_by_keyword(search_query))
     i = int(input("Enter the file number four the output: "))
 
     # write the data to json file

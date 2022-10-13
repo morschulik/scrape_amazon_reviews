@@ -66,9 +66,7 @@ async def get_reviews(some_asin):
 if __name__ == '__main__':
     product_asin = 'B08QVPBFCS'
     reviews_by_product = asyncio.run(get_reviews(product_asin))
-
     i = int(input("Enter the file number four the output: "))
-
     # write the data to json file
     with open(f'Data/json/product_reviews_{i}.json', 'w') as file:
         json.dump(reviews_by_product, file, indent=2)

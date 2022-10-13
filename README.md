@@ -11,18 +11,20 @@ And the URL of the reviews is
 `url = f"https://www.amazon.com/product-reviews/{asin}/"`
 
 So we need the asin of an object to scrap its review
-We will have 3 search queries to produce a list of search results of those products with their reviews
+We will have 3 search queries to test the search results of those products.
+
 The scraper for the search results is in `scrap_search.py`
 (Its explanation and comments on it can be found in the Jupiter notebook `scrap_search.ipynb`)
-The scraper of the reviews is in the file `scraping_reviews.py` it scrapes the reviews of one product and is explained in the notebook.
-In the `main.py` file we connect them together to crape the reviews of all possible many products
-The `Fullscraper.py` file should be used if the other codes get blocked from amazon. It contains an API key from [Scrapfly](https://scrapfly.io/blog/how-to-scrape-amazon/) to overcome the scrape blocking
-The data can be found in the `data` folder
+The scraper of the reviews is in the file `scrap_reviews.py` it scrapes the reviews of one product and is explained in the notebook.
+In the `main.py` file we connect them together to scrape the reviews of all possible many products.
+
+The results data can be found in the `data` folder
 # scrape_amazon_reviews
-To get reviews from amazon is interesting to analyze such with NLP.\n This is a student project within the ReDI School Data Circle program.
+the aim is to get reviews from amazon, it is interesting to analyze such with NLP.\n This is a student project within the ReDI School Data Circle program.
 
 ## Installation
 
+you need to [create and activate your virtual environment](https://realpython.com/python-virtual-environments-a-primer/) and inside it, you need to run
 ```bash
 pip install -r requirements.txt
 ```

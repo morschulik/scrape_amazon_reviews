@@ -1,10 +1,8 @@
+import re
+import time
 from main import *
-from scrap_search import get_product_search_list
-import asyncio, json, httpx, re, time
-import pandas as pd
 
-from scraping_reviews import get_reviews
-
+# trial to automate the scraper
 if __name__ == '__main__':
     search_keyword = 'Refrigerator'
     reviews_by_keyword_1 = asyncio.run(get_reviews_by_keyword(search_keyword))
@@ -13,15 +11,12 @@ if __name__ == '__main__':
     i = '000000'
     j = 1
     while j != 2000000:
-
         # increasing the file suffix by one
         i = re.sub(r'[0-9]+$', lambda x: f"{str(int(x.group()) + 1).zfill(len(x.group()))}", i)
         print("Incremented numeric String : " + str(i))
-
         with open(f'Data/json/combined_results_{i}.json', 'r') as end_results_file:
             reviews_by_keyword = json.load(end_results_file)
         reviews_by_keyword_1 = asyncio.run(get_reviews_by_keyword(search_keyword))
-
         if reviews_by_keyword != reviews_by_keyword_1:
             reviews_by_keyword = reviews_by_keyword_1
             with open(f'Data/json/combined_results_{i}.json', 'w') as file:
