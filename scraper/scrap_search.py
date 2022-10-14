@@ -1,5 +1,5 @@
 import httpx
-import requests
+# import requests
 import asyncio
 import json
 import pandas as pd
@@ -22,8 +22,9 @@ def parse_search(resp):
     product_boxes = sel.css("div.s-result-item[data-component-type=s-search-result]")
     for box in product_boxes:
         asin = box.xpath('@data-asin').extract_first()
-        # get the url of every search item in the search result
+        # get the url of every search item in the search result inclusive ads(sponsored items)
         box_url = urljoin(str(resp.url), box.css("h2>a::attr(href)").get()).split("?")[0]
+        # the standard url of any product is:
         url = f"https://www.amazon.com/dp/{asin}"
         if len(urljoin(str(resp.url), box.css("h2>a::attr(href)").get()).split("/")) != 6 and "/slredirect/" not in box_url and "sspa" not in box_url:  # skip ads etc.
             previews.append(
@@ -37,10 +38,11 @@ def parse_search(resp):
     return previews
 
 
-async def search(query, session):
+async def search(query: str, session: httpx.AsyncClient):
     log.info(f"{query}: scraping the first page")
     search_url = f"https://www.amazon.com/s?k={query}&page=1"
-    first_page = requests.get(search_url, headers=HEADERS)
+    # first_page = requests.get(search_url, headers=HEADERS)
+    first_page = await session.get(search_url, headers=HEADERS)
     sel = Selector(text=first_page.text)
     last_page = sel.xpath('//span[has-class("s-pagination-disabled")][not(has-class("s-pagination-previous"))]/text()')
     total_pages = int(last_page.getall()[0])  # the wrong solution was max(int(number) for number in _page_numbers)
@@ -54,29 +56,27 @@ async def search(query, session):
     return previews
 
 
-# write the data to some json or Excel file
+# preparing the session and timeout to be used when calling the function
 async def get_product_search_list(query):
     limits = httpx.Limits(max_connections=5)
     async with httpx.AsyncClient(limits=limits, timeout=httpx.Timeout(15.5), headers=HEADERS) as session:
-        data = await search(query, session=session)
-    return data
+        parsed_data = await search(query, session=session)
+    return parsed_data
 
 if __name__ == '__main__':
     search_query_1 = 'Refrigerator'.replace(' ', '+')
     search_query_2 = 't-shirt women'.replace(' ', '+')  # --> 't-shirt+women'
     search_query_3 = 'lego'.replace(' ', '+')  # --> 't-shirt+women'
 
+
+    #replace search_query_1 with any other one
     products_by_query = asyncio.run(get_product_search_list(search_query_1))
 
     i = int(input("Enter the file number four the output: "))
 
-    # write the data to json file
+    # dump the data to json file
     with open(f'Data/json/query_results_{i}.json', 'w') as file:
         json.dump(products_by_query, file, indent=2)
     # write the data to Excel file
     df = pd.DataFrame(products_by_query, columns=['asin', 'title', 'url'])
     df.to_excel(f"Data/xlsx/query_results_{i}.xlsx", index=False)
-
-
-
-
