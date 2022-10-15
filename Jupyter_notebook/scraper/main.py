@@ -5,11 +5,10 @@ from scrap_reviews import *
 
 
 async def get_reviews_by_keyword(keyword):
-    query = keyword.replace(' ', '+')
     limits = httpx.Limits(max_connections=5)
     async with httpx.AsyncClient(limits=limits, timeout=httpx.Timeout(20.0), headers=BASE_HEADERS) as session:
 
-        products_list = await search(query, session=session)
+        products_list = await search(keyword, session=session)
         # asins_list = [product["asin"] for product in products_list]
         end_results_list = []
         for product in products_list:
@@ -34,12 +33,11 @@ async def get_reviews_by_keyword(keyword):
 if __name__ == '__main__':
     # pass
     search_keyword = 'Refrigerator'
-    
-    # this code will take a while
-    reviews_by_keyword = asyncio.run(get_reviews_by_keyword(search_keyword))
+    search_query = search_keyword.replace(' ', '+')
+    reviews_by_keyword = asyncio.run(get_reviews_by_keyword(search_query))
     i = int(input("Enter the file number four the output: "))
 
-    # dump the data to json file
+    # write the data to json file
     with open(f'Data/json/combined_results_{i}.json', 'w') as file:
         json.dump(reviews_by_keyword, file, indent=2)
     # write the data to Excel file
