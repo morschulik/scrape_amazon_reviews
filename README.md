@@ -35,7 +35,46 @@ pip install -r requirements.txt
 
 # Usage
 
-Scrapes all pages reviews by product searched 
+## 1. scrap_search
+
+- Add the search keyword in the main scope.
+- run the code
+- A popup will ask you to enter the number of the file in which your results will be saved.
+- Check the results in the Data directory
+
+## 2.scrap_reviews
+
+- Enter the product asin
+- run the code
+- when the popup asks you enter the file number
+- check the results in the data directory
+
+## 3. main
+
+- Enter the search keyword.
+- Run the code
+- Wait for a while (could take more than 10 minutes)
+- Enter the file number
+- check the results in the Data directory
+
+### 4. automated_scraper
+
+This part needs just to be run (but it is still under examination)
 
 # Rules to Contributing
+
 Please open an issue first to discuss what you would like to change.
+
+# Future Outlook/ Extra Suggested Amendments
+
+You can model the data from the resulted json file by following [this approach](https://guides.codepath.com/android/converting-json-to-models)
+Or use the Pandas framework to create an SQL database as [explained here](https://datatofish.com/pandas-dataframe-to-sql/)
+
+**Further**
+
+We can create a ml model which crawls the data daily as an html and gathers it as an archive in a data lake (using AWS s3 or Azure cloud) and scrape it later.
+[This link](https://valohai.com/blog/web-scraping-ml-pipeline/) describes the benefits of this approach to build a dynamic pipeline.
+
+
+![Modern web scraping pipeline for an ML project](https://valohai.com/blog/web-scraping-ml-pipeline/modern-web-scraping-pipeline-for-an-ml-project.png)
+
