@@ -2,8 +2,6 @@ from scrap_search import search
 from scrap_reviews import *
 
 # combine the scrap_search and the scrap_reviews
-
-
 async def get_reviews_by_keyword(keyword):
     query = keyword.replace(' ', '+')
     limits = httpx.Limits(max_connections=5)
@@ -34,7 +32,6 @@ async def get_reviews_by_keyword(keyword):
 if __name__ == '__main__':
     # the Data directory lists the results for the search keyword "Refrigerator"
     search_keyword = input("Enter the search keyword: ")
-    
     # this code will take a while
     reviews_by_keyword = asyncio.run(get_reviews_by_keyword(search_keyword))
     i = int(input("Enter the file number four the output: "))
