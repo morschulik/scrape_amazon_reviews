@@ -64,9 +64,13 @@ async def get_product_search_list(query):
     return parsed_data
 
 if __name__ == '__main__':
-    search_query_1 = 'Refrigerator'.replace(' ', '+')
-    search_query_2 = 't-shirt women'.replace(' ', '+')  # --> 't-shirt+women'
-    search_query_3 = 'lego'.replace(' ', '+')  # --> 't-shirt+women'
+    # replace the search keyword by any keywords you want
+    search_keywords='Refrigerator'
+
+    # removing spaces between your keywords
+    search_query_1 = search_keywords.replace(' ', '+')
+    # search_query_2 = 't-shirt women'.replace(' ', '+')  # --> 't-shirt+women'
+    # search_query_3 = 'lego'.replace(' ', '+')  # --> 't-shirt+women'
 
 
     #replace search_query_1 with any other one

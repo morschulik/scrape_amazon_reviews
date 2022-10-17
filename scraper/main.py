@@ -32,8 +32,8 @@ async def get_reviews_by_keyword(keyword):
 
 
 if __name__ == '__main__':
-    # pass
-    search_keyword = 'Refrigerator'
+    # the Data directory lists the results for the search keyword "Refrigerator"
+    search_keyword = input("Enter the search keyword: ")
     
     # this code will take a while
     reviews_by_keyword = asyncio.run(get_reviews_by_keyword(search_keyword))
