@@ -78,3 +78,5 @@ We can create a ml model which crawls the data daily as an html and gathers it a
 
 ![Modern web scraping pipeline for an ML project](https://valohai.com/blog/web-scraping-ml-pipeline/modern-web-scraping-pipeline-for-an-ml-project.png)
 
+
+**One can also combine the scraper with django to create a new websites listing specific items and some analysis on them.**
